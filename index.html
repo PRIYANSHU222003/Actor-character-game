@@ -1,0 +1,596 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor Characteristics Game</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #100c20, #201333, #111827);
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 25px;
+        }
+
+        header h1 {
+            font-size: clamp(28px, 5vw, 44px);
+            color: #ffd166;
+            margin-bottom: 12px;
+        }
+
+        header p {
+            color: #d1d5db;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin: 20px auto 30px;
+            max-width: 650px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 15px;
+            border: 2px solid #51416b;
+            border-radius: 10px;
+            background: #211a32;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #ffd166;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 14px 20px;
+            background: #ffd166;
+            color: #201333;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #ffb703;
+            transform: translateY(-2px);
+        }
+
+        .message {
+            text-align: center;
+            margin: 15px 0;
+            color: #ffd166;
+            min-height: 22px;
+        }
+
+        .actor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            padding-bottom: 40px;
+        }
+
+        .actor-card {
+            background: rgba(39, 30, 57, 0.95);
+            border: 1px solid #49385f;
+            border-radius: 16px;
+            padding: 24px;
+            transition: 0.25s;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .actor-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd166;
+        }
+
+        .actor-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .actor-card h2 {
+            color: #ffd166;
+            font-size: 21px;
+            margin-bottom: 15px;
+        }
+
+        .actor-card ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .actor-card li {
+            color: #e5e7eb;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .actor-card li::before {
+            content: "✦ ";
+            color: #ffd166;
+        }
+
+        .details-btn {
+            width: 100%;
+            padding: 11px;
+            background: #493568;
+            color: white;
+        }
+
+        .details-btn:hover {
+            background: #654a8d;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid #49385f;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        @media (max-width: 500px) {
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box button {
+                width: 100%;
+            }
+
+            .actor-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🎬 Actor Characteristics Game</h1>
+        <p>Discover the personality, talent, and famous roles of your favorite stars!</p>
+    </header>
+
+    <main class="container">
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="actorInput"
+                placeholder="Enter an actor's name..."
+                aria-label="Search actor"
+            >
+            <button onclick="searchActor()">🔍 Search Actor</button>
+            <button onclick="showAllActors()">Show All</button>
+        </div>
+
+        <p class="message" id="message" aria-live="polite">
+            Explore your favorite Bollywood and Hollywood stars!
+        </p>
+
+        <section class="actor-grid" id="actorGrid"></section>
+
+    </main>
+
+    <footer>
+        🎥 Actor Characteristics Game | Made with ❤️
+    </footer>
+
+    <script>
+        const actors = [
+            {
+                name: "Salman Khan",
+                icon: "🕶️",
+                characteristics: [
+                    "Charismatic and confident",
+                    "Strong action-hero image",
+                    "Good comic timing",
+                    "Known for romantic roles",
+                    "Famous for Chulbul Pandey"
+                ]
+            },
+            {
+        name: "Amitabh Bachchan",
+        icon: "🎙️",
+        characteristics: [
+            "Known as the Shahenshah of Bollywood",
+            "Deep and powerful voice",
+            "Commanding screen presence",
+            "Excellent dialogue delivery",
+            "Famous for Jai and Vijay"
+        ]
+    },
+    {
+        name: "Hrithik Roshan",
+        icon: "💃",
+        characteristics: [
+            "Exceptional dancing skills",
+            "Athletic physique",
+            "Expressive eyes",
+            "Skilled in action sequences",
+            "Famous for Rohit and Kabir"
+        ]
+    },
+     {
+        name: "Akshay Kumar",
+        icon: "🥋",
+        characteristics: [
+            "Known for action and comedy films",
+            "Skilled in martial arts",
+            "Energetic screen presence",
+            "Performs physically demanding roles",
+            "Famous for Raju in Hera Pheri"
+        ]
+    },
+    {
+        name: "Ajay Devgn",
+        icon: "🔥",
+        characteristics: [
+            "Known for intense performances",
+            "Serious and controlled acting style",
+            "Strong action-hero image",
+            "Effective in dramatic roles",
+            "Famous for Bajirao Singham"
+        ]
+    },
+     {
+        name: "Alia Bhatt",
+        icon: "🎭",
+        characteristics: [
+            "Known for versatile acting",
+            "Expressive emotional performances",
+            "Natural dialogue delivery",
+            "Transforms convincingly for roles",
+            "Famous for Gangubai and Safeena"
+        ]
+    },
+     {
+        name: "Kajol",
+        icon: "😊",
+        characteristics: [
+            "Highly expressive acting",
+            "Energetic and natural performances",
+            "Excellent emotional range",
+            "Memorable romantic roles",
+            "Famous for Anjali and Simran"
+        ]
+    },
+     {
+        name: "Tom Cruise",
+        icon: "🏎️",
+        characteristics: [
+            "Known for performing many of his own stunts",
+            "Energetic action performances",
+            "Confident screen presence",
+            "Famous for action-packed films",
+            "Famous for Ethan Hunt and Maverick"
+        ]
+    },
+    {
+        name: "Leonardo DiCaprio",
+        icon: "🎥",
+        characteristics: [
+            "Known for intense character performances",
+            "Excellent emotional range",
+            "Immersive acting style",
+            "Versatile across genres",
+            "Famous for Jack Dawson and Jordan Belfort"
+        ]
+    },
+    {
+        name: "Brad Pitt",
+        icon: "😎",
+        characteristics: [
+            "Charismatic screen presence",
+            "Versatile dramatic and comedic acting",
+            "Distinctive screen persona",
+            "Strong performances in character-driven films",
+            "Famous for Tyler Durden and Achilles"
+        ]
+    },
+    {
+        name: "Robert Downey Jr.",
+        icon: "🤖",
+        characteristics: [
+            "Known for witty dialogue delivery",
+            "Charismatic and expressive acting",
+            "Excellent comic timing",
+            "Famous for superhero roles",
+            "Famous for Tony Stark and Sherlock Holmes"
+        ]
+    },
+     {
+        name: "Dwayne Johnson",
+        icon: "💪",
+        characteristics: [
+            "Known for action and adventure films",
+            "Muscular physique and powerful presence",
+            "Energetic comedic performances",
+            "Former professional wrestling star",
+            "Famous for Luke Hobbs and Maui"
+        ]
+    },
+     {
+        name: "Jackie Chan",
+        icon: "🥋",
+        characteristics: [
+            "Combines action and comedy",
+            "Exceptional martial arts choreography",
+            "Known for elaborate physical stunts",
+            "Creative use of everyday objects in action",
+            "Famous for Inspector Lee and Chan Ka-kui"
+        ]
+    },
+    {
+        name: "Scarlett Johansson",
+        icon: "🖤",
+        characteristics: [
+            "Known for versatile dramatic performances",
+            "Strong action screen presence",
+            "Distinctive voice",
+            "Effective emotional expression",
+            "Famous for Black Widow and Charlotte"
+        ]
+    },
+    {
+        name: "Emma Watson",
+        icon: "📚",
+        characteristics: [
+            "Known for intelligent and composed characters",
+            "Clear dialogue delivery",
+            "Strong screen presence in fantasy films",
+            "Recognized for dramatic roles",
+            "Famous for Hermione Granger and Belle"
+        ]
+    },
+    {
+        name: "Angelina Jolie",
+        icon: "🦸‍♀️",
+        characteristics: [
+            "Powerful screen presence",
+            "Strong performances in action films",
+            "Expressive and intense acting",
+            "Recognizable dramatic style",
+            "Famous for Lara Croft and Maleficent"
+        ]
+    },
+     {
+        name: "Ryan Reynolds",
+        icon: "😂",
+        characteristics: [
+            "Known for sarcastic humor",
+            "Excellent comic timing",
+            "Fast-paced dialogue delivery",
+            "Energetic action-comedy performances",
+            "Famous for Deadpool"
+        ]
+    },
+            {
+                name: "Shah Rukh Khan",
+                icon: "👑",
+                characteristics: [
+                    "Known as the King of Romance",
+                    "Emotional and expressive acting",
+                    "Excellent screen presence",
+                    "Energetic dancer",
+                    "Famous for Raj and Rahul"
+                ]
+            },
+            {
+                name: "Aamir Khan",
+                icon: "🎭",
+                characteristics: [
+                    "Known for realistic performances",
+                    "Very selective about films",
+                    "Transforms himself for roles",
+                    "Strong emotional acting",
+                    "Famous for 3 Idiots, Lagaan and Dangal"
+                ]
+            },
+            {
+                name: "Ranveer Singh",
+                icon: "⚡",
+                characteristics: [
+                    "Extremely energetic",
+                    "Highly expressive",
+                    "Very versatile",
+                    "Known for intense performances",
+                    "Famous for Gully Boy and Padmaavat"
+                ]
+            },
+            {
+                name: "Aishwarya Rai",
+                icon: "🌹",
+                characteristics: [
+                    "Elegant and graceful",
+                    "Strong screen presence",
+                    "Expressive acting",
+                    "Known for emotional roles",
+                    "Former Miss World"
+                ]
+            },
+            {
+                name: "Sushmita Sen",
+                icon: "✨",
+                characteristics: [
+                    "Confident and elegant",
+                    "Strong personality",
+                    "Often plays independent characters",
+                    "Powerful screen presence",
+                    "Former Miss Universe"
+                ]
+            },
+            {
+                name: "Priyanka Chopra",
+                icon: "🌟",
+                characteristics: [
+                    "Versatile actress",
+                    "Confident and expressive",
+                    "Strong emotional range",
+                    "Known for powerful characters",
+                    "Successful internationally"
+                ]
+            },
+            {
+                name: "Tamannaah Bhatia",
+                icon: "💃",
+                characteristics: [
+                    "Elegant and glamorous",
+                    "Expressive performer",
+                    "Strong dancing skills",
+                    "Versatile across languages",
+                    "Known for Baahubali and Jailer"
+                ]
+            },
+            {
+                name: "Prabhas",
+                icon: "🛡️",
+                characteristics: [
+                    "Powerful screen presence",
+                    "Known for action roles",
+                    "Calm and intense acting style",
+                    "Often plays heroic characters",
+                    "Famous for Baahubali and Salaar"
+                ]
+            },
+            {
+                name: "Robert Downey Jr.",
+                icon: "🤖",
+                characteristics: [
+                    "Charismatic and witty",
+                    "Excellent comic timing",
+                    "Expressive acting",
+                    "Confident screen presence",
+                    "Famous for Tony Stark / Iron Man"
+                ]
+            },
+            {
+                name: "Chris Evans",
+                icon: "🦸",
+                characteristics: [
+                    "Strong and disciplined characters",
+                    "Natural screen presence",
+                    "Known for heroic roles",
+                    "Good emotional range",
+                    "Famous for Steve Rogers / Captain America"
+                ]
+            }
+        ];
+
+        const grid = document.getElementById("actorGrid");
+        const input = document.getElementById("actorInput");
+        const message = document.getElementById("message");
+
+        function renderActors(list) {
+            grid.innerHTML = "";
+
+            if (list.length === 0) {
+                message.textContent =
+                    "❌ Actor not found! Try another name.";
+                return;
+            }
+
+            list.forEach(actor => {
+                const card = document.createElement("article");
+                card.className = "actor-card";
+
+                const icon = document.createElement("div");
+                icon.className = "actor-icon";
+                icon.textContent = actor.icon;
+
+                const title = document.createElement("h2");
+                title.textContent = actor.name;
+
+                const listElement = document.createElement("ul");
+                listElement.className = "hidden";
+
+                actor.characteristics.forEach(characteristic => {
+                    const item = document.createElement("li");
+                    item.textContent = characteristic;
+                    listElement.appendChild(item);
+                });
+
+                const button = document.createElement("button");
+                button.className = "details-btn";
+                button.textContent = "View Characteristics";
+
+                button.addEventListener("click", () => {
+                    const isHidden = listElement.classList.toggle("hidden");
+                    button.textContent = isHidden
+                        ? "View Characteristics"
+                        : "Hide Characteristics";
+                });
+
+                card.append(icon, title, listElement, button);
+                grid.appendChild(card);
+            });
+
+            message.textContent =
+                `🎭 Found ${list.length} actor${list.length === 1 ? "" : "s"}!`;
+        }
+
+        function searchActor() {
+            const query = input.value.trim().toLowerCase();
+
+            if (!query) {
+                message.textContent = "Please enter an actor's name.";
+                input.focus();
+                return;
+            }
+
+            const results = actors.filter(actor =>
+                actor.name.toLowerCase().includes(query)
+            );
+
+            renderActors(results);
+        }
+
+        function showAllActors() {
+            input.value = "";
+            renderActors(actors);
+        }
+
+        input.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                searchActor();
+            }
+        });
+
+        renderActors(actors);
+    </script>
+
+</body>
+</html>
