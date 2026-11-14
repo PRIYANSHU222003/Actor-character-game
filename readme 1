@@ -1,0 +1,37 @@
+Actor Characteristics Game – C++ Project Description
+
+The Actor Characteristics Game is a simple, interactive, and entertaining console-based application developed using the C++ programming language. The main purpose of this project is to provide information about popular Bollywood and Hollywood actors, including their personalities, acting abilities, special talents, and famous movie characters.
+
+The program contains a database of famous actors, where each actor's name and characteristics are stored using the C++ map, structure (struct), vector, and string data types.
+
+When the program starts, it displays the title Actor Characteristics Game and asks the user to enter an actor's name. The user can search for actors such as Salman Khan, Shah Rukh Khan, Amitabh Bachchan, Aamir Khan, Tom Cruise, Brad Pitt, and many others.
+
+If the entered actor's name matches an available record in the database, the program displays the actor's name along with five interesting characteristics. If the actor is not available, it displays an error message asking the user to try another name.
+
+The program also supports continuous searching, allowing users to search for multiple actors without restarting the application. To terminate the game, users simply type exit.
+
+Technologies and Concepts Used
+C++: Main programming language used to develop the application.
+Structure (struct): Stores actor names and their characteristics together.
+Map: Stores actor information using actor names as keys.
+Vector: Stores multiple characteristics of each actor.
+String: Handles actor names and descriptive information.
+Loops: Allows users to search for multiple actors continuously.
+Conditional Statements: Checks whether the entered actor exists in the database.
+STL (Standard Template Library): Uses containers such as map and vector for efficient data management.
+Main Features
+Contains information about Bollywood and Hollywood actors.
+Allows users to search for actors by name.
+Displays five characteristics of each available actor.
+Supports both Indian and international actors.
+Converts user input into lowercase for easier searching.
+Displays an error message when an actor is not found.
+Allows continuous searching without restarting the program.
+Provides an exit option to terminate the application.
+Objective of the Project
+
+The main objective of this project is to develop a fun and informative application that helps users learn about famous actors and their unique characteristics. It also aims to improve understanding of important C++ programming concepts, especially structures, maps, vectors, strings, loops, and conditional statements.
+
+Conclusion
+
+The Actor Characteristics Game is an entertaining and educational C++ mini-project that combines movie knowledge with programming concepts. It provides a simple and interactive user experience while demonstrating the practical implementation of C++ data structures and control statements. The project can also be extended in the future by adding more actors, searching by partial names, and introducing a quiz or guessing game feature.
